@@ -2,6 +2,19 @@ var ideaTitleInput = $('.title-input');
 var ideaBodyInput = $('.body-input');
 var ideaArray = [];
 
+function addEditedBodyContentToLocal() {
+  var id = $(this).closest('.idea-card').prop('id');
+  var parseIdea = JSON.parse(localStorage.getItem(id));
+  parseIdea.body = $(this).text();
+  localStorage.setItem(id, JSON.stringify(parseIdea));
+}
+function addEditedTitleContentToLocal() {
+  var id = $(this).closest('.idea-card').prop('id');
+  var parseIdea = JSON.parse(localStorage.getItem(id));
+  parseIdea.title = $(this).text();
+  localStorage.setItem(id, JSON.stringify(parseIdea));
+}
+
 function ideasFromLocal() {
   var keys = Object.keys(localStorage);
   var keyLength = keys.length;
@@ -27,6 +40,16 @@ function constructNewIdea(title, body) {
   this.quality = 'Swill';
 }
 
+function pushLocalStorageIntoArray() {
+  //could be how to get rid of of the global variable ideaArray
+  var ideaArray = [];
+  var keys = Object.keys(localStorage);
+  var keyLength = keys.length;
+  for (var j = 0; j < keyLength; j++) {
+    ideaArray.push(JSON.parse(localStorage.getItem(keys[j])));
+  }
+}
+
 function prependIdeaCard(newIdeaCard) {
   $('.bottom-section').prepend(`<section
     class="card-holder-section">
@@ -45,7 +68,6 @@ function prependIdeaCard(newIdeaCard) {
         </div>
       </article>
     </section>`);
-  clearInput();
 }
 
 function storeIdeaCard(newIdeaCard) {
@@ -57,14 +79,10 @@ $('.save-button').on('click', function(event) {
   var ideaTitle = ideaTitleInput.val();
   var ideaBody = ideaBodyInput.val();
   var newIdeaCard = new constructNewIdea(ideaTitle, ideaBody);
-  // constructNewIdea();
   prependIdeaCard(newIdeaCard);
   storeIdeaCard(newIdeaCard);
-  var keys = Object.keys(localStorage);
-  var keyLength = keys.length;
-  for (var j = 0; j < keyLength; j++) {
-    ideaArray.push(JSON.parse(localStorage.getItem(keys[j])));
-  }
+  pushLocalStorageIntoArray();
+  clearInput();
 });
 
 $('.bottom-section').on('click','button.delete-button', function() {
@@ -92,22 +110,10 @@ $('.bottom-section').on('keypress','.idea-card-header',function(event) {
   }
 })
 
-$('.bottom-section').on('keyup focusout','.article-text-container',function() {
-  var id = $(this).closest('.idea-card').prop('id');
-  var parseIdea = JSON.parse(localStorage.getItem(id));
-  parseIdea.body = $(this).text();
-  localStorage.setItem(id, JSON.stringify(parseIdea));
-})
+$('.bottom-section').on('keyup focusout','.article-text-container', addEditedBodyContentToLocal)
 
-$('.bottom-section').on('keydown','.article-text-container',function(event) {
-  if (event.which == 13) {
-    // document.execCommand("DefaultParagraphSeparator", false, "p");
-    var id = $(this).closest('.idea-card').prop('id');
-    var parseIdea = JSON.parse(localStorage.getItem(id));
-    parseIdea.title = $(this).text();
-    localStorage.setItem(id, JSON.stringify(parseIdea));
-  }
-})
+
+$('.bottom-section').on('keydown','.article-text-container',addEditedTitleContentToLocal)
 
 $('.bottom-section').on('click', 'button.upvote-button', function() {
   var id = $(this).closest('.idea-card').prop('id');
