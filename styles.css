@@ -14,6 +14,9 @@ body {
   height: 100%;
   width: 100%;
 }
+button:hover {
+  background-color: #045E55;
+}
 
 h1 {
   background-color: #E5F3F2;
@@ -43,7 +46,6 @@ span {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 300px;
 }
 
 .input {
@@ -54,7 +56,17 @@ span {
   height: 40px;
   width: 75%;
 }
+form .input {
+  margin-bottom: 10px;
+}
+form p {
+  margin-top: 0;
+  text-align: center;
+}
 
+form .save-btn {
+  margin-bottom: 30px;
+}
 .web-inputs::-webkit-input-placeholder {
   color: #D1D3D4;
 }
@@ -73,6 +85,29 @@ span {
 .save-btn:disabled {
   background-color: #939598;
 }
+.complete-recent-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 0 18%;
+}
+.show-completed-btn {
+  width: 40%;
+  background-color: #00A79D;
+  border: none;
+  color: #FFFFFF;
+  font-size: 16px;
+  margin: 0;
+}
+.show-recent-btn {
+  width: 40%;
+  background-color: #00A79D;
+  border: none;
+  color: #FFFFFF;
+  font-size: 16px;
+  margin: 0;
+}
 .importance-search-container {
   display: flex;
   align-content: center;
@@ -86,6 +121,7 @@ span {
   margin-top: 25px;
   width: 75%;
 }
+
 .importance-lvl-btn button {
   height: 40px;
   width: 16%;
@@ -96,6 +132,9 @@ span {
   font-size: 15px;
   font-weight: 300;
   letter-spacing: 0.7px;
+}
+.importance-lvl-btn button:hover {
+  background-color: #045E55;
 }
 .search-box {
   margin-top: 25px;

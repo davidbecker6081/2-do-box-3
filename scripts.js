@@ -1,48 +1,29 @@
-parseAndPrependLocalStorage();
 
 $(window).on('load', function() {
   $('.title-input').focus();
   toggleSaveDisable();
+  showIncompleteTodos();
 })
 
-showMostRecentTodos();
-
-function showMostRecentTodos() {
-  var recentArray = pushLocalStorageIntoArray();
-  // if (recentArray.length > 10) {
-  //   recentArray.forEach(function(task, index) {
-  //     recentArray[]
-  //   })
-  // }
-  //use the highest number of date.now() (10 highest key values)
-
-  //If sort and reverse order, use this
-  recentArray.forEach(function(todo, index) {
-    if (index > 9) {
-      recentArray.splice(index, recentArray.length-index)
-    }
-  })
-  $('.todo-lib').children().remove();
-  recentArray.forEach(function(todo) {
-    prependTaskCard(todo);
-  })
-}
-
-
-
 $(window).on('keyup', function(e) {
-  if(e.keyCode === 13 && ($('.title-input').val() !== '') && ($('.task-input').val() !== '')){
+  if(e.keyCode === 13 && ($('.title-input').val() !== '') && ($('.task-input').val() !== '' && $('.title-input').val().length < 120) && $('.task-input').val().length < 120){
     toggleSaveDisable();
     $('.save-btn').trigger('click');
   }
 });
 
+
 $('.task-input').on('input', function() {
   toggleSaveDisable();
+  countTaskChar();
 })
 
+$('.title-input').on('keydown', function() {
+  countTitleChar();
+})
 $('.title-input').on('input', function() {
   toggleSaveDisable();
+  countTitleChar();
 })
 
 $('.todo-lib').on('click','button.delete-btn', deleteTask)
@@ -50,15 +31,10 @@ $('.todo-lib').on('click','button.delete-btn', deleteTask)
 //may want to refactor to switch case function
 $('.todo-lib').on('click', 'button.downvote-btn', downvoteBtnClick)
 
-$('.todo-lib').on('click', 'button.upvote-btn', function() {
-  var id = $(this).closest('.todo-card').prop('id');
-  var parseTask = JSON.parse(localStorage.getItem(id));
-  switchImportanceUp(parseTask);
-  localStorage.setItem(id, JSON.stringify(parseTask));
-  filterTasks();
-})
+$('.todo-lib').on('click', 'button.upvote-btn', upvoteBtnClick)
 
-$('.todo-card').on('click', 'button.completed-btn-select', function() {
+$('.todo-lib').on('click', 'button.completed-btn-select', function() {
+  console.log('click')
   var id = $(this).closest('.todo-card').prop('id');
   var parseTask = JSON.parse(localStorage.getItem(id));
     if (parseTask.completed === false) {
@@ -68,8 +44,7 @@ $('.todo-card').on('click', 'button.completed-btn-select', function() {
       $(this).closest('.todo-card').removeClass('completed-task');
       parseTask.completed = false;
     }
-  localStorage.setItem(id, JSON.stringify(parseTask))
-  // filterTasks();
+  localStorage.setItem(id, JSON.stringify(parseTask));
 })
 
 $('.todo-lib').on('focusout','.article-text-container',editTaskBody)
@@ -102,6 +77,16 @@ $('.search-box').on('input', function() {
   }
 })
 
+$('.show-completed-btn').on('click', function(e){
+  e.preventDefault();
+  showCompletedTodos();
+})
+
+$('.show-recent-btn').on('click', function(e) {
+  e.preventDefault();
+  showMostRecentTodos();
+})
+
 $('.critical-btn').on('click', importanceBtnFilter);
 $('.high-btn').on('click', importanceBtnFilter);
 $('.normal-btn').on('click', importanceBtnFilter);
@@ -109,12 +94,43 @@ $('.low-btn').on('click', importanceBtnFilter);
 $('.none-btn').on('click', importanceBtnFilter);
 
 
+function appendTaskCard(newTaskCard) {
+  $('.todo-lib').append(`<section
+    class="card-holder-section">
+      <article class="todo-card" id=${newTaskCard.id}>
+        <div class="task-name-section">
+          <h2 contenteditable='true' class="todo-card-header">${newTaskCard.title}</h2>
+          <button class="delete-btn" type="button" name="button"></button>
+        </div>
+        <div>
+          <p contenteditable='true' class="article-text-container">${newTaskCard.taskBody}</p>
+        </div>
+        <div class="quality-control-container">
+          <button class="upvote-btn" type="button" name="button"></button>
+          <button class="downvote-btn" type="button" name="button"></button>
+          <p>quality: <span class="quality">${newTaskCard.importance}</p>
+          <div class="completed-container">
+            <button class="completed-btn-select" type="button" name="button"></button>
+          </div>
+        </div>
+      </article>
+    </section>`);
+}
 
 function clearInputs() {
   $('.title-input').val('');
   $('.task-input').val('');
   $('.title-input').focus();
   toggleSaveDisable();
+}
+
+function countTitleChar() {
+  var titleLength = $('.title-input').val().length
+  $('.title-char-count').text(titleLength)
+}
+function countTaskChar() {
+  var taskLength = $('.task-input').val().length
+  $('.task-char-count').text(taskLength)
 }
 
 function deleteTask() {
@@ -223,6 +239,51 @@ function pushLocalStorageIntoArray() {
   } return taskArray;
 }
 
+function showCompletedTodos() {
+  var localArray = pushLocalStorageIntoArray();
+  console.log('show completed button', $('.show-completed-btn').text())
+  if ($('.show-completed-btn').text() === 'Show Completed Todos') {
+    var completedArray = localArray.filter(function(todo) {
+    return todo.completed === true;
+    })
+    completedArray.forEach(function(todo) {
+      prependTaskCard(todo);
+    })
+    $('.show-completed-btn').text('Hide Completed Todos')
+  } else if ($('.show-completed-btn').text() === 'Hide Completed Todos') {
+    $('.todo-lib').children().remove()
+    var incompleteArray = localArray.filter(function(todo) {
+      return todo.completed === false;
+    })ß
+    incompleteArray.forEach(function(todo) {
+      prependTaskCard(todo);
+    })
+    $('.show-completed-btn').text('Show Completed Todos')
+  }
+}
+
+function showIncompleteTodos() {
+  var localArray = pushLocalStorageIntoArray();
+  var incompleteArray = localArray.filter(function(todo) {
+    return todo.completed === false;
+  })
+  $('.todo-lib').children().remove();
+  incompleteArray.forEach(function(todo) {
+    prependTaskCard(todo);
+  })
+}
+
+function showMostRecentTodos() {
+  $('.todo-lib').children().remove();
+  var recentArray = pushLocalStorageIntoArray();
+  recentArray = recentArray.reverse();
+  recentArray.forEach(function(todo, index) {
+    if (index < 10) {
+      appendTaskCard(todo);
+    }
+  })
+}
+
 function storeTaskCard(newTaskCard) {
   localStorage.setItem(newTaskCard.id, JSON.stringify(newTaskCard));
 }
@@ -285,24 +346,31 @@ function toggleCompletedTask() {
   var id = $(this).closest('.todo-card').prop('id');
   var parseTask = JSON.parse(localStorage.getItem(id));
     if (parseTask.completed === false) {
-      $(this).closest('.todo-card').toggleClass('completed-task');
+      $(this).closest('.todo-card').addClass('completed-task');
       parseTask.completed = true;
     } else if (parseTask.completed === true) {
-      $(this).closest('.todo-card').toggleClass('completed-task');
+      $(this).closest('.todo-card').removeClass('completed-task');
       parseTask.completed = false;
     }
   localStorage.setItem(id, JSON.stringify(parseTask))
-  // filterTasks();
 }
 
 function toggleSaveDisable() {
   var titleInput = $('.title-input').val();
   var taskInput = $('.task-input').val();
-  if (titleInput === '' || taskInput === '') {
+  if (titleInput === '' || taskInput === '' || $('.title-input').val().length > 120 || $('.task-input').val().length > 120) {
     $('.save-btn').prop('disabled', true)
   } else {
     $('.save-btn').prop('disabled', false)
   }
+}
+
+function upvoteBtnClick() {
+  var id = $(this).closest('.todo-card').prop('id');
+  var parseTask = JSON.parse(localStorage.getItem(id));
+  switchImportanceUp(parseTask);
+  localStorage.setItem(id, JSON.stringify(parseTask));
+  filterTasks();
 }
 
 //Attempt to pull out separate functions for changing downvote
