@@ -62,10 +62,10 @@ $('.todo-card').on('click', 'button.completed-btn-select', function() {
   var id = $(this).closest('.todo-card').prop('id');
   var parseTask = JSON.parse(localStorage.getItem(id));
     if (parseTask.completed === false) {
-      $(this).closest('.todo-card').toggleClass('completed-task');
+      $(this).closest('.todo-card').addClass('completed-task');
       parseTask.completed = true;
     } else if (parseTask.completed === true) {
-      $(this).closest('.todo-card').toggleClass('completed-task');
+      $(this).closest('.todo-card').removeClass('completed-task');
       parseTask.completed = false;
     }
   localStorage.setItem(id, JSON.stringify(parseTask))
