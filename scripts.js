@@ -1,4 +1,3 @@
-
 $(window).on('load', function() {
   $('.title-input').focus();
   toggleSaveDisable();
@@ -34,14 +33,17 @@ $('.todo-lib').on('click', 'button.downvote-btn', downvoteBtnClick)
 $('.todo-lib').on('click', 'button.upvote-btn', upvoteBtnClick)
 
 $('.todo-lib').on('click', 'button.completed-btn-select', function() {
-  console.log('click')
   var id = $(this).closest('.todo-card').prop('id');
   var parseTask = JSON.parse(localStorage.getItem(id));
     if (parseTask.completed === false) {
       $(this).closest('.todo-card').addClass('completed-task');
+      var completedTodo = $(this).closest('.todo-card').attr('class')
+      parseTask.status = completedTodo
       parseTask.completed = true;
     } else if (parseTask.completed === true) {
       $(this).closest('.todo-card').removeClass('completed-task');
+      var completedTodo = $(this).closest('.todo-card').attr('class')
+      parseTask.status = completedTodo
       parseTask.completed = false;
     }
   localStorage.setItem(id, JSON.stringify(parseTask));
@@ -57,7 +59,6 @@ $('.save-btn').on('click', function(event) {
   storeTaskCard(newTaskCard);
   clearInputs();
   filterTasks();
-  showMostRecentTodos();
 });
 
 $('.search-box').on('input', function() {
@@ -97,7 +98,7 @@ $('.none-btn').on('click', importanceBtnFilter);
 function appendTaskCard(newTaskCard) {
   $('.todo-lib').append(`<section
     class="card-holder-section">
-      <article class="todo-card" id=${newTaskCard.id}>
+      <article class="${newTaskCard.status}" id=${newTaskCard.id}>
         <div class="task-name-section">
           <h2 contenteditable='true' class="todo-card-header">${newTaskCard.title}</h2>
           <button class="delete-btn" type="button" name="button"></button>
@@ -210,7 +211,7 @@ function parseAndPrependLocalStorage() {
 function prependTaskCard(newTaskCard) {
   $('.todo-lib').prepend(`<section
     class="card-holder-section">
-      <article class="todo-card" id=${newTaskCard.id}>
+      <article class="${newTaskCard.status}" id=${newTaskCard.id}>
         <div class="task-name-section">
           <h2 contenteditable='true' class="todo-card-header">${newTaskCard.title}</h2>
           <button class="delete-btn" type="button" name="button"></button>
@@ -241,7 +242,6 @@ function pushLocalStorageIntoArray() {
 
 function showCompletedTodos() {
   var localArray = pushLocalStorageIntoArray();
-  console.log('show completed button', $('.show-completed-btn').text())
   if ($('.show-completed-btn').text() === 'Show Completed Todos') {
     var completedArray = localArray.filter(function(todo) {
     return todo.completed === true;
@@ -251,13 +251,7 @@ function showCompletedTodos() {
     })
     $('.show-completed-btn').text('Hide Completed Todos')
   } else if ($('.show-completed-btn').text() === 'Hide Completed Todos') {
-    $('.todo-lib').children().remove()
-    var incompleteArray = localArray.filter(function(todo) {
-      return todo.completed === false;
-    })ß
-    incompleteArray.forEach(function(todo) {
-      prependTaskCard(todo);
-    })
+    showIncompleteTodos();
     $('.show-completed-btn').text('Show Completed Todos')
   }
 }
@@ -340,6 +334,7 @@ function todoObj(title, task) {
   this.id = Date.now();
   this.importance = 'Normal';
   this.completed = false;
+  this.status = 'todo-card'
 }
 
 function toggleCompletedTask() {
@@ -347,9 +342,17 @@ function toggleCompletedTask() {
   var parseTask = JSON.parse(localStorage.getItem(id));
     if (parseTask.completed === false) {
       $(this).closest('.todo-card').addClass('completed-task');
+      var completedTodo = $(this).closest('.todo-card').attr('class')
+      console.log('parsetask status', parseTask.status)
+      parseTask.status = completedTodo
+      console.log('completed todo', completeTodo)
       parseTask.completed = true;
     } else if (parseTask.completed === true) {
       $(this).closest('.todo-card').removeClass('completed-task');
+      var completedTodo = $(this).closest('.todo-card').attr('class')
+      console.log('parsetask status', parseTask.status)
+      parseTask.status = completedTodo
+      console.log('completed todo', completeTodo)
       parseTask.completed = false;
     }
   localStorage.setItem(id, JSON.stringify(parseTask))

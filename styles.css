@@ -14,9 +14,6 @@ body {
   height: 100%;
   width: 100%;
 }
-button:hover {
-  background-color: #045E55;
-}
 
 h1 {
   background-color: #E5F3F2;
@@ -84,6 +81,9 @@ form .save-btn {
 
 .save-btn:disabled {
   background-color: #939598;
+}
+.complete-recent-container button:hover {
+  background-color: #045E55;
 }
 .complete-recent-container {
   display: flex;
