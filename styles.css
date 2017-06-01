@@ -16,16 +16,16 @@ body {
 }
 
 h1 {
-  background-color: #E5F3F2;
-  color: #00A79D;
   flex-direction: column;
-  text-align: center;
-  font-family: 'roboto slab';
-  font-weight:700;
-  font-size: 48px;
   margin-bottom: 0;
   margin-top: 0;
   padding: 30px 0;
+  color: #00A79D;
+  background-color: #E5F3F2;
+  font-family: 'roboto slab';
+  font-weight:700;
+  font-size: 48px;
+  text-align: center;
 }
 
 h2 {
@@ -39,19 +39,19 @@ span {
 }
 
 .todo-input {
-  background-color: #E5F3F2;
   display: flex;
   flex-direction: column;
   width: 100%;
+  background-color: #E5F3F2;
 }
 
 .input {
-  border: solid 2px #D1D3D4;
   display: block;
   margin: 0px auto 20px;
   padding-left:5px;
   height: 40px;
   width: 75%;
+  border: solid 2px #D1D3D4;
 }
 form .input {
   margin-bottom: 10px;
@@ -93,7 +93,6 @@ form .save-btn {
   padding: 0 13%;
 }
 .complete-recent-container button {
-  margin: 0px auto 20px;
   padding-left: 5px;
   height: 40px;
   width: 35%;
@@ -157,13 +156,13 @@ form .save-btn {
 }
 
 .completed-btn-select {
+  height: 26px;
+  width: 26px;
   background: none;
   background-image: url(assets/checking.svg);
   background-repeat: no-repeat;
   background-size: contain;
   border: none;
-  height: 26px;
-  width: 26px;
 }
 
 .completed-btn-select:hover {
@@ -176,14 +175,14 @@ form .save-btn {
 }
 
 .delete-btn {
+  height: 30px;
+  width: 30px;
   background: none;
   background-image: url(assets/delete.svg);
   background-repeat: no-repeat;
   background-size: contain;
   border: none;
   margin-top: 18px;
-  height: 30px;
-  width: 30px;
 }
 
 .delete-btn:hover {
@@ -191,30 +190,30 @@ form .save-btn {
 }
 
 .article-text-container {
-  color: #939598;
-  font-size: 18px;
   width: 75%;
   padding: 5px 0;
+  color: #939598;
+  font-size: 18px;
 }
 
 .quality-control-container {
-  color:  #6D6E71;
-  display: flex;
-  font-size: 18px;
   justify-content: flex-start;
   margin-bottom: 20px;
+  display: flex;
+  color:  #6D6E71;
+  font-size: 18px;
 }
 
 .upvote-btn {
+  height: 30px;
+  margin-right: 25px;
+  margin-top: 18px;
+  width: 30px;
   background: none;
   background-image: url(assets/upvote.svg);
   background-repeat: no-repeat;
   background-size: contain;
   border: none;
-  margin-right: 25px;
-  margin-top: 18px;
-  height: 30px;
-  width: 30px;
 }
 
 .upvote-btn:hover{
@@ -222,15 +221,15 @@ form .save-btn {
 }
 
 .downvote-btn {
+  height: 30px;
+  margin-right: 25px;
+  margin-top: 18px;
+  width: 30px;
   background: none;
   background-image: url(assets/downvote.svg);
   background-repeat: no-repeat;
   background-size: contain;
   border: none;
-  margin-right: 25px;
-  margin-top: 18px;
-  height: 30px;
-  width: 30px;
 }
 
 .downvote-btn:hover {
@@ -240,8 +239,8 @@ form .save-btn {
 .completed-container {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   flex-grow: 2;
+  justify-content: flex-end;
   margin-right: 3px;
 }
 @media (max-width: 375px){
