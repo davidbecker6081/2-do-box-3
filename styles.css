@@ -90,24 +90,20 @@ form .save-btn {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-  padding: 0 18%;
+  padding: 0 13%;
 }
-.show-completed-btn {
-  width: 40%;
+.complete-recent-container button {
+  margin: 0px auto 20px;
+  padding-left: 5px;
+  height: 40px;
+  width: 35%;
   background-color: #00A79D;
   border: none;
   color: #FFFFFF;
-  font-size: 16px;
-  margin: 0;
+  font-size: 15px;
+  margin: 0 10px;
 }
-.show-recent-btn {
-  width: 40%;
-  background-color: #00A79D;
-  border: none;
-  color: #FFFFFF;
-  font-size: 16px;
-  margin: 0;
-}
+
 .importance-search-container {
   display: flex;
   align-content: center;

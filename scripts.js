@@ -2,6 +2,7 @@ $(window).on('load', function() {
   $('.title-input').focus();
   toggleSaveDisable();
   showIncompleteTodos();
+  clearCounts();
 })
 
 $(window).on('keyup', function(e) {
@@ -37,13 +38,11 @@ $('.todo-lib').on('click', 'button.completed-btn-select', function() {
   var parseTask = JSON.parse(localStorage.getItem(id));
     if (parseTask.completed === false) {
       $(this).closest('.todo-card').addClass('completed-task');
-      var completedTodo = $(this).closest('.todo-card').attr('class')
-      parseTask.status = completedTodo
+      parseTask.status = $(this).closest('.todo-card').attr('class')
       parseTask.completed = true;
     } else if (parseTask.completed === true) {
       $(this).closest('.todo-card').removeClass('completed-task');
-      var completedTodo = $(this).closest('.todo-card').attr('class')
-      parseTask.status = completedTodo
+      parseTask.status = $(this).closest('.todo-card').attr('class')
       parseTask.completed = false;
     }
   localStorage.setItem(id, JSON.stringify(parseTask));
@@ -59,6 +58,7 @@ $('.save-btn').on('click', function(event) {
   storeTaskCard(newTaskCard);
   clearInputs();
   filterTasks();
+  clearCounts();
 });
 
 $('.search-box').on('input', function() {
@@ -78,7 +78,7 @@ $('.search-box').on('input', function() {
   }
 })
 
-$('.show-completed-btn').on('click', function(e){
+$('.show-completed-btn').on('click', function(e) {
   e.preventDefault();
   showCompletedTodos();
 })
@@ -86,6 +86,11 @@ $('.show-completed-btn').on('click', function(e){
 $('.show-recent-btn').on('click', function(e) {
   e.preventDefault();
   showMostRecentTodos();
+})
+
+$('.show-more-todos-btn').on('click', function(e) {
+  e.preventDefault();
+  showMoreRecentTodos();
 })
 
 $('.critical-btn').on('click', importanceBtnFilter);
@@ -116,6 +121,11 @@ function appendTaskCard(newTaskCard) {
         </div>
       </article>
     </section>`);
+}
+
+function clearCounts() {
+  $('.title-char-count').text('0')
+  $('.task-char-count').text('0')
 }
 
 function clearInputs() {
@@ -278,6 +288,18 @@ function showMostRecentTodos() {
   })
 }
 
+function showMoreRecentTodos() {
+  if ($('.card-holder-section').length === 10) {
+    var recentArray = pushLocalStorageIntoArray();
+    recentArray = recentArray.reverse();
+    recentArray.forEach(function(todo, index) {
+      if (index >= 10 && index < 15) {
+        prependTaskCard(todo);
+      }
+    })
+  }
+}
+
 function storeTaskCard(newTaskCard) {
   localStorage.setItem(newTaskCard.id, JSON.stringify(newTaskCard));
 }
@@ -342,17 +364,11 @@ function toggleCompletedTask() {
   var parseTask = JSON.parse(localStorage.getItem(id));
     if (parseTask.completed === false) {
       $(this).closest('.todo-card').addClass('completed-task');
-      var completedTodo = $(this).closest('.todo-card').attr('class')
-      console.log('parsetask status', parseTask.status)
-      parseTask.status = completedTodo
-      console.log('completed todo', completeTodo)
+      parseTask.status = $(this).closest('.todo-card').attr('class')
       parseTask.completed = true;
     } else if (parseTask.completed === true) {
       $(this).closest('.todo-card').removeClass('completed-task');
-      var completedTodo = $(this).closest('.todo-card').attr('class')
-      console.log('parsetask status', parseTask.status)
-      parseTask.status = completedTodo
-      console.log('completed todo', completeTodo)
+      parseTask.status = $(this).closest('.todo-card').attr('class')
       parseTask.completed = false;
     }
   localStorage.setItem(id, JSON.stringify(parseTask))
